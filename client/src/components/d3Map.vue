@@ -327,12 +327,8 @@ export default {
 
       map.selectAll('.edge')
       .each(function(q){
-
-        console.log(this)
-
-        let path = d3.select(this).remove();
-
-        console.log(GL.samples(path.node(), 8))
+        
+        let path = d3.select(this).remove()
 
         map.selectAll("hehe")
             .data(GL.quads(GL.samples(path.node(), 8)))

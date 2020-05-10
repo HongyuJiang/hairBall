@@ -28,7 +28,41 @@ export default {
           .attr("font-size", 16)
           .attr("font-family", "sans-serif")
 
-        console.log(positions)
+        function dataBin(dataList, binNum, attr){
+
+          let min = d3.min(dataList, d => d[attr])
+          let max = d3.max(dataList, d => d[attr])
+
+          let range = (max - min) / binNum
+
+          let dataGroup = {}
+
+          dataList.forEach(function(d){
+
+            let index = parseInt((d[attr] - min) / range) % (binNum) 
+
+            if(dataGroup[index] != undefined){
+
+              dataGroup[index]['counter'] += 1
+            }
+            else{
+              dataGroup[index] = {}
+              dataGroup[index]['value'] = min + (index * range)
+              dataGroup[index]['counter'] = 1
+            }
+          })
+
+          return dataGroup;
+        }
+
+        let groupDData = dataBin(positions, 32, 'angle')
+
+        let _data = []
+
+        for(let key in groupDData){
+
+          _data.push(groupDData[key])
+        }
 
         let ring = svg.append('circle')
         .attr('r', 100)
@@ -42,28 +76,28 @@ export default {
         let spins = svg.append('g')
         .attr('transform','translate( ' + this.width /2 + ',' + this.height / 2 + ')')
 
-        let radius = 100
+        let radius = 105
         let outerRadius = 120
 
         spins.selectAll('.spin')
-        .data(positions)
+        .data(_data)
         .enter()
         .append('line')
-        .attr('x1', d => radius * Math.cos(d.angle * Math.PI / 180))
-        .attr('y1', d => radius * Math.sin(d.angle * Math.PI / 180))
-        .attr('x2', d => outerRadius * Math.cos(d.angle * Math.PI / 180))
-        .attr('y2', d => outerRadius * Math.sin(d.angle * Math.PI / 180))
-        .attr('stroke','black')
+        .attr('x1', d => radius * Math.cos(d.value * Math.PI / 180))
+        .attr('y1', d => radius * Math.sin(d.value * Math.PI / 180))
+        .attr('x2', d => (radius + d.counter * 2) * Math.cos(d.value * Math.PI / 180))
+        .attr('y2', d => (radius + d.counter * 2) * Math.sin(d.value * Math.PI / 180))
+        .attr('stroke','#8D85F2')
         .attr('fill','none')
-        .attr('opacity','0.3')
-        .attr('stroke-width', 2)
+        .attr('opacity','0.5')
+        .attr('stroke-width', 5)
 
         spins.selectAll('.spinDot')
-        .data(positions)
+        .data(_data)
         .enter()
         .append('circle')
-        .attr('cx', d => outerRadius * Math.cos(d.angle * Math.PI / 180))
-        .attr('cy', d => outerRadius * Math.sin(d.angle * Math.PI / 180))
+        .attr('cx', d => (radius + d.counter * 2) * Math.cos(d.value * Math.PI / 180))
+        .attr('cy', d => (radius + d.counter * 2) * Math.sin(d.value * Math.PI / 180))
         .attr('r',3)
         .attr('fill','#8D85F2')
         .attr('opacity','0.3')
@@ -74,7 +108,7 @@ export default {
         .attr('cx', this.width /2)
         .attr('cy', this.height /2)
         .attr('r', 10)
-        .attr('fill', 'grey')
+        .attr('fill', 'black')
 
         cross.append('line')
         .attr('x1', this.width /2 - 30)
