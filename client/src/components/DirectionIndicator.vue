@@ -64,6 +64,8 @@ export default {
           _data.push(groupDData[key])
         }
 
+        let valueMax = d3.max(_data, d => d.counter)
+
         let ring = svg.append('circle')
         .attr('r', 100)
         .attr('cx', this.width / 2)
@@ -77,7 +79,7 @@ export default {
         .attr('transform','translate( ' + this.width /2 + ',' + this.height / 2 + ')')
 
         let radius = 105
-        let outerRadius = 120
+        let barHeight = 50
 
         spins.selectAll('.spin')
         .data(_data)
@@ -85,8 +87,8 @@ export default {
         .append('line')
         .attr('x1', d => radius * Math.cos(d.value * Math.PI / 180))
         .attr('y1', d => radius * Math.sin(d.value * Math.PI / 180))
-        .attr('x2', d => (radius + d.counter * 2) * Math.cos(d.value * Math.PI / 180))
-        .attr('y2', d => (radius + d.counter * 2) * Math.sin(d.value * Math.PI / 180))
+        .attr('x2', d => (radius + d.counter / valueMax * barHeight) * Math.cos(d.value * Math.PI / 180))
+        .attr('y2', d => (radius + d.counter / valueMax * barHeight) * Math.sin(d.value * Math.PI / 180))
         .attr('stroke','#8D85F2')
         .attr('fill','none')
         .attr('opacity','0.5')
@@ -96,8 +98,8 @@ export default {
         .data(_data)
         .enter()
         .append('circle')
-        .attr('cx', d => (radius + d.counter * 2) * Math.cos(d.value * Math.PI / 180))
-        .attr('cy', d => (radius + d.counter * 2) * Math.sin(d.value * Math.PI / 180))
+        .attr('cx', d => (radius + d.counter / valueMax * barHeight) * Math.cos(d.value * Math.PI / 180))
+        .attr('cy', d => (radius + d.counter / valueMax * barHeight) * Math.sin(d.value * Math.PI / 180))
         .attr('r',3)
         .attr('fill','#8D85F2')
         .attr('opacity','0.3')
@@ -107,22 +109,22 @@ export default {
         cross.append('circle')
         .attr('cx', this.width /2)
         .attr('cy', this.height /2)
-        .attr('r', 10)
-        .attr('fill', 'black')
+        .attr('r', 6)
+        .attr('fill', 'grey')
 
         cross.append('line')
         .attr('x1', this.width /2 - 30)
         .attr('x2', this.width /2 + 30)
         .attr('y1', this.height /2)
         .attr('y2', this.height /2)
-        .attr('stroke', 'black')
+        .attr('stroke', 'grey')
 
         cross.append('line')
         .attr('x1', this.width /2)
         .attr('x2', this.width /2)
         .attr('y1', this.height /2 - 30)
         .attr('y2', this.height /2 + 30)
-        .attr('stroke', 'black')
+        .attr('stroke', 'grey')
 
         cross.append('text')
         .attr('class','dir')

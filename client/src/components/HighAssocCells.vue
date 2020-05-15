@@ -67,7 +67,7 @@ export default {
         let sankey = Sankey()
             .nodeSort(null)
             .linkSort(null)
-            .nodeWidth(4)
+            .nodeWidth(8)
             .nodePadding(5)
             .extent([[0, 5], [this.width, this.height - 5]])
 
@@ -78,8 +78,6 @@ export default {
 
         let that = this
 
-        console.log(nodes, newEdges)
-      
         svg.append("g")
             .selectAll("rect")
             .data(nodes)
@@ -89,8 +87,25 @@ export default {
             .attr("y", d => d.y0)
             .attr("height", d => d.y1 - d.y0)
             .attr("width", d => d.x1 - d.x0)
-            .append("title")
-            .text(d => `${d.name}\n${d.value.toLocaleString()}`);
+            .on('mouseover', function(d){
+
+              let sourceId = d.id
+
+              svg.selectAll('.river')
+              .transition()
+              .attr('stroke', function(q){
+
+                if (sourceId == q.source.id || sourceId == q.target.id)
+                  return "red"
+                else return 'grey'
+              })
+            })
+            .on('mouseout', d=>{
+
+              svg.selectAll('.river')
+              .transition()
+              .attr('stroke', 'grey')
+            })
 
         svg.append("g")
             .attr("fill", "none")
@@ -98,14 +113,13 @@ export default {
             .data(newEdges)
             .enter()
             .append("path")
+            .attr('class','river')
             .attr("d", sankeyLinkHorizontal())
             .attr("stroke", 'grey')
             .attr("stroke-opacity", '0.3')
             .attr("stroke-width", d => d.width)
             .style("mix-blend-mode", "multiply")
-            .append("title")
-            //.text(d => `${d.names + " → "}\n${d.value.toLocaleString()}`);
-
+            
         svg.append("g")
             .style("font", "16px sans-serif")
             .selectAll("text")
