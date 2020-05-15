@@ -40,6 +40,7 @@ export default {
           .projection(projection);
 
         let map = svg.append('g').attr('id','mapContainer')
+        let linkContainer = map.append('g').attr('id','linkContainer')
 
         map.selectAll("path")
         .data(mapFeatures.features)
@@ -56,7 +57,10 @@ export default {
         this.map = map
 
         function zoomed(d) {
+
           let factor = d3.event.transform.k
+          map.attr('transform', d3.event.transform);
+          /*
           map.selectAll('path').attr('transform', d3.event.transform);
           map.selectAll('.cell').attr('transform', d3.event.transform).attr('r',function(d){
 
@@ -66,7 +70,7 @@ export default {
           })
           map.selectAll('.edge').attr('transform', d3.event.transform)
           map.selectAll('.selector').attr('transform', d3.event.transform)
-
+          */
         }
 
         map.call(zoom);
@@ -135,11 +139,17 @@ export default {
               .attr('or', 20)
               .attr('cx', p[0])
               .attr('cy', p[1])
-              .attr('fill','#fff')
-              .attr('fill-opacity', 0.2)
-              .attr('stroke','#000')
+              .attr('fill','#333')
+              .attr('opacity', 0.5)
+              .attr('stroke','white')
               .attr('stroke-width', 2)
-              //.call(drag)
+
+          map.select('#linkContainer').append("clipPath")      
+            .attr("id", "circle-clip") 
+            .append("circle") 
+            .attr("cx", p[0]) 
+            .attr("cy", p[1])
+            .attr('r', R)
 
           let selected = []
 
@@ -308,7 +318,8 @@ export default {
       that.$root.$emit('updateAssocCells', [graphWithoutEgo, that.cell_info])
       that.$root.$emit('updateTemporal', source_finder)
 
-      let graph_edges = map.selectAll('.link')
+   
+      let graph_edges = map.select('#linkContainer').selectAll('.link')
       .data(edges)
       .enter()
       .append('g')
@@ -320,16 +331,18 @@ export default {
       .attr('d', curve)
       .attr('opacity','0.5')
       .attr('fill','none')
-      .attr('stroke','black')
+      .attr('stroke','#ccc')
       .attr('stroke-width', d => d.weight / 5)
+      //.attr('clip-path', 'url(#circle-clip)')
 
       var color = d3.interpolateRgb('#78FFB8', '#FF8D84');
 
       map.selectAll('.edge')
       .each(function(q){
         
-        let path = d3.select(this).remove()
+        //let path = d3.select(this).remove()
 
+        /*
         map.selectAll("hehe")
             .data(GL.quads(GL.samples(path.node(), 8)))
           .enter().append("path")
@@ -338,6 +351,8 @@ export default {
             .style("fill", function(d) { return color(d.t); })
             .style("stroke", function(d) { return color(d.t); })
             .attr("d", function(d) { return GL.lineJoin(d[0], d[1], d[2], d[3], q.weight / 5); });
+        */
+
       })
 
       

@@ -111,7 +111,13 @@ export default {
             .attr("width", xHour.bandwidth())
             .attr('fill','#BFAFAC')
             .attr("y", function(d) { return yHour(d.value); })
-            .attr("height", function(d) { return that.height - yHour(d.value); });
+            .attr("height", function(d) { return that.height - yHour(d.value); })
+            .on('mouseover', function(d){
+              d3.select(this).transition().attr('fill','#D57DE8')
+            })
+            .on('mouseout', function(d){
+              d3.select(this).transition().attr('fill','#BFAFAC')
+            })
 
         svg.append("g")
             .attr("transform", "translate(0," + that.height + ")")
@@ -142,7 +148,13 @@ export default {
             .attr("width", xDay.bandwidth())
             .attr('fill','#BFAFAC')
             .attr("y", function(d) { return yDay(d.value); })
-            .attr("height", function(d) { return that.height - yDay(d.value); });
+            .attr("height", function(d) { return that.height - yDay(d.value); })
+            .on('mouseover', function(d){
+              d3.select(this).transition().attr('fill','#D57DE8')
+            })
+            .on('mouseout', function(d){
+              d3.select(this).transition().attr('fill','#BFAFAC')
+            })
 
         dayContainer.append("g")
             .attr("transform", "translate(0," + that.height + ")")
