@@ -26,8 +26,6 @@ export default {
           .attr("font-size", 16)
           .attr("font-family", "sans-serif")
 
-        
-
         let simulation = d3.forceSimulation()
         .force("charge", d3.forceManyBody())
         //.force("link", d3.forceLink().id(function(d) { return d.id; }))

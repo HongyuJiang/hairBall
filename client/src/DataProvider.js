@@ -17,5 +17,9 @@ export default class DataProvider {
 
         return axios.get('/static/510700.json');
     }
+    static getUserSemantics() {
+
+        return axios.get('/static/user_semantics.json');
+    }
    
 }

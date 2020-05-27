@@ -18,7 +18,7 @@
     <div class="float-layer right-float-layer">
 
       <direction-indicator />
-      <inner-net />
+      <user-semantics />
       <high-assoc-cells />
       <temporal-features />
       
@@ -39,6 +39,7 @@ import DirectionIndicator from './components/DirectionIndicator.vue';
 import InnerNet from './components/InnerNet.vue';
 import HighAssocCells from './components/HighAssocCells.vue';
 import TemporalFeatures from './components/TemporalFeatures.vue';
+import UserSemantics from './components/UserSemantics.vue';
 
 //连接时序特征 上 1,2 柱状图或者流图
 //方向特征 中 1 玫瑰图
@@ -53,7 +54,7 @@ export default {
     DynamicAttrIndicator,
     d3Map,
     DirectionIndicator,
-    InnerNet,
+    UserSemantics,
     HighAssocCells,
     TemporalFeatures
 

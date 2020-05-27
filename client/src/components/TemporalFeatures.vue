@@ -94,7 +94,7 @@ export default {
           .attr("font-family", "sans-serif")
 
         let xHour = d3.scaleBand()
-          .range([0, this.width/2])
+          .range([0, this.width/2.5])
           .padding(0.1);
         let yHour = d3.scaleLinear()
           .range([this.height, 0]);
@@ -109,7 +109,7 @@ export default {
             .attr("class", "hourBar")
             .attr("x", function(d) { return xHour(d.hour); })
             .attr("width", xHour.bandwidth())
-            .attr('fill','#BFAFAC')
+            .attr('fill','#999')
             .attr("y", function(d) { return yHour(d.value); })
             .attr("height", function(d) { return that.height - yHour(d.value); })
             .on('mouseover', function(d){
@@ -129,7 +129,7 @@ export default {
         // day ---------------------
 
         let xDay = d3.scaleBand()
-          .range([0, this.width/3.5])
+          .range([0, this.width/5])
           .padding(0.2);
         let yDay = d3.scaleLinear()
           .range([this.height, 0]);
@@ -138,7 +138,7 @@ export default {
         yDay.domain([0, d3.max(dayList, function(d) { return d.value; })]);
 
         let dayContainer = svg.append('g')
-        .attr('transform', 'translate(600,0)')
+        .attr('transform', 'translate(370,0)')
 
         dayContainer.selectAll(".dayBar")
             .data(dayList)
@@ -146,7 +146,7 @@ export default {
             .attr("class", "dayBar")
             .attr("x", function(d) { return xDay(d.day); })
             .attr("width", xDay.bandwidth())
-            .attr('fill','#BFAFAC')
+            .attr('fill','#999')
             .attr("y", function(d) { return yDay(d.value); })
             .attr("height", function(d) { return that.height - yDay(d.value); })
             .on('mouseover', function(d){
