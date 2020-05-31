@@ -10,7 +10,7 @@
           class="dynamic-attrs"
         />
 
-        <d3-map />
+        <mapbox-view />
     
     </div>
 
@@ -40,6 +40,7 @@ import InnerNet from './components/InnerNet.vue';
 import HighAssocCells from './components/HighAssocCells.vue';
 import TemporalFeatures from './components/TemporalFeatures.vue';
 import UserSemantics from './components/UserSemantics.vue';
+import MapboxView from './components/MapboxView.vue';
 
 //连接时序特征 上 1,2 柱状图或者流图
 //方向特征 中 1 玫瑰图
@@ -52,7 +53,7 @@ export default {
   components: {
     FixedAttrIndicator,
     DynamicAttrIndicator,
-    d3Map,
+    MapboxView,
     DirectionIndicator,
     UserSemantics,
     HighAssocCells,

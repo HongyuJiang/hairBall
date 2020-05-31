@@ -50,7 +50,7 @@ export default {
         })
 
         user_bars.selectAll('step')
-        .data(d => d)
+        .data(d => d.filter(q => q[2] != -1))
         .enter()
         .append('circle')
         .attr('cy', function(d,i){
@@ -110,8 +110,6 @@ export default {
         let trajectory = response.data
 
         this.chartInit(trajectory)
-
-        console.log(123)
 
     });
 
