@@ -314,7 +314,7 @@ export default {
       })
 
       that.$root.$emit('updateDirIndicator', positions)
-      that.$root.$emit('updateInnerNet', [innerEdges, that.cell_info])
+      //that.$root.$emit('updateInnerNet', [innerEdges, that.cell_info])
       that.$root.$emit('updateAssocCells', [graphWithoutEgo, that.cell_info])
       that.$root.$emit('updateTemporal', source_finder)
 

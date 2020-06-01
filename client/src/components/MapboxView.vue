@@ -48,7 +48,7 @@ export default {
         type: "line",
         source: "region_json",
         paint: {
-          "line-width": 4,
+          "line-width": 2,
           "line-color": "rgba(200,0,0,0.5)"
         },
         minzoom: 5,
@@ -125,7 +125,16 @@ export default {
 
           let targetCounter = {};
 
+          let targetCollection = []
+
+          let sourceEntities = {}, targetEntities = {}
+
+          let positions = []
+
+          let graphWithoutEgo = []
+
           points.forEach(function(p) {
+
             let pos = p["geometry"]["coordinates"];
 
             let id = p["properties"]["id"];
@@ -138,18 +147,70 @@ export default {
 
             if (dis < 400) {
 
+              let angleDeg = Math.atan2(q.y - s_point.y, q.x - s_point.x) * 180 / Math.PI;
+
+              positions.push({'source': id, 'angle': angleDeg})
+
               p["properties"].selected = true;
+              
+              let targets = that.relations[id];
+
+              if(targets) {
+
+                targets.forEach(function(t){
+
+                  targetEntities[t[0]] = 1
+                })
+
+                targetCollection.push(targets)
+                
+              }
+              sourceEntities[id] = 1
+            }
+
+          });
+
+          points.forEach(function(p) {
+
+            let id = p["properties"]["id"]
+          
+            if(targetEntities[id] != undefined && sourceEntities[id] == undefined){
+
+              p["properties"].size = 12;
+              p["properties"].color = '#30FA74';
+
+            }
+            else if(sourceEntities[id] != undefined){
 
               let targets = that.relations[id];
 
-              if (targets)
-                targets.forEach(function(t) {
-                  if (targetCounter[t[0]] != undefined)
-                    targetCounter[t[0]] += t[1];
-                  else targetCounter[t[0]] = t[1];
-                });
+              if(targets) {
+
+                targets.forEach(function(t){
+
+                  if(sourceEntities[t[0]] == undefined)
+                    graphWithoutEgo.push({'source': id, 'target':t[0], 'weight': t[1]})
+                })
+                
+              }
+              
             }
-          });
+          })
+
+          console.log(graphWithoutEgo)
+
+          that.$root.$emit('updateTemporal', sourceEntities)
+          that.$root.$emit('updateDirIndicator', positions)
+          that.$root.$emit('updateAssocCells', [graphWithoutEgo, that.cell_info])
+
+          targetCollection.forEach(function(targets){
+
+            targets.forEach(function(t) {
+                  if (targetCounter[t[0]] != undefined && sourceEntities[t[0]] == undefined)
+                    targetCounter[t[0]] += t[1];
+                  else if (sourceEntities[t[0]] == undefined) targetCounter[t[0]] = t[1];
+                });
+          })
 
           for (let t in targetCounter) {
             let cell = that.cell_info[t];
@@ -257,7 +318,7 @@ export default {
           sy: sPos.y,
           tx: tPos.x,
           ty: tPos.y,
-          weight: tPos.weight
+          weight: p.weight
         };
 
         OD_lines.push(meta);
@@ -301,10 +362,10 @@ export default {
         .append("path")
         .attr('class','link')
         .attr("d", curve)
-        .attr("opacity", "0.5")
+        .attr("opacity", 0.4)
         .attr("fill", "none")
-        .attr("stroke", "#ccc")
-        .attr("stroke-width", d => d.weight / 5);
+        .attr("stroke", "#ECEC4B")
+        .attr("stroke-width", d => Math.sqrt(d.weight));
     },
 
     mapAddSelection(location) {
@@ -358,6 +419,8 @@ export default {
             cell.name = cell.name.split("_")[1];
           meta["properties"]["name"] = cell.name.replace("绵阳", "");
           meta["properties"]["weight"] = 1;
+          meta["properties"]["size"] = 0;
+          meta["properties"]["color"] = "rgba(255,255,255,0.1)";
           meta["properties"]["id"] = cell.id;
           meta["type"] = "Feature";
           meta["geometry"] = {};
@@ -392,7 +455,7 @@ export default {
           source: "cells",
           paint: {
             "circle-radius": 2,
-            "circle-color": "rgba(255,255,255,0.1)",
+            "circle-color": { "type": "identity", "property": "color" },
             "circle-stroke-width": 0,
             "circle-stroke-color": "#fff"
           }
@@ -406,7 +469,7 @@ export default {
           layout: {
             "text-field": "{name}",
             // "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-            "text-size": 12,
+            "text-size": { "type": "identity", "property": "size" },
             "text-offset": [0, 1.2],
             "text-anchor": "top"
           },

@@ -144,11 +144,11 @@ export default {
     d3.select('#' + 'high-assoc-cells-container')
       .style('position', 'absolute')
       .style('top', '5%')
-      .style('right', '40%')
-      .style('width', '55%')
+      .style('right', '35%')
+      .style('width', '60%')
       .style('height', '65%')
 
-    this.width = 600
+    this.width = 700
     this.height = 700
 
     let that = this
