@@ -136,8 +136,7 @@ export default {
             .attr("fill-opacity", 0.7)
             .text(d => ` ${d.value.toLocaleString()}`);
 
-
-    }
+       }
   },
   mounted(){
 

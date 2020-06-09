@@ -109,7 +109,7 @@ export default {
             .attr("class", "hourBar")
             .attr("x", function(d) { return xHour(d.hour); })
             .attr("width", xHour.bandwidth())
-            .attr('fill','#999')
+            .attr('fill','#BFAFAC')
             .attr("y", function(d) { return yHour(d.value); })
             .attr("height", function(d) { return that.height - yHour(d.value); })
             .on('mouseover', function(d){
@@ -146,7 +146,7 @@ export default {
             .attr("class", "dayBar")
             .attr("x", function(d) { return xDay(d.day); })
             .attr("width", xDay.bandwidth())
-            .attr('fill','#999')
+            .attr('fill','#BFAFAC')
             .attr("y", function(d) { return yDay(d.value); })
             .attr("height", function(d) { return that.height - yDay(d.value); })
             .on('mouseover', function(d){

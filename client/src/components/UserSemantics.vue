@@ -1,7 +1,7 @@
  <template>
 
   <div id='user-semantics-container'>
-      <div class='name'>羊肉串串</div>
+      <div class='name'>用户甘特图</div>
       <div id='user-semantics'>
    
       </div>
@@ -36,35 +36,81 @@ export default {
 
             if(user_semantics[user].length > 100){
 
-                selected.push(user_semantics[user])
+                selected.push({ 'name': user, 'seq': user_semantics[user]})
             }
         }
 
+        let segments = {}
+        let segments_list = []
+
+        selected.forEach(function(userSeq){
+
+          let name = userSeq.name
+          let seq = userSeq.seq
+
+          segments[name] = []
+
+          for(let i =0; i < seq.length - 1;i++){
+
+            let meta = {'start': seq[i], 'end': seq[i+1]}
+
+            //if(seq[i+1][0] < 3)
+              segments[name].push(meta)
+          }
+        })
+
+        for(let user in segments){
+
+          segments_list.push(segments[user])
+        }
+
         let user_bars = svg.selectAll('userBar')
-        .data(selected.slice(0, 20))
+        .data(segments_list.slice(0, 10))
         .enter()
         .append('g')
         .attr('transform', function(d,i){
 
-            return 'translate(' + (i * 25) + ',0)'
+            return 'translate(' + (i * 50 - 10) + ',0)'
         })
+
+        user_bars.selectAll('back')
+        .data([0,1,2,3,4,5])
+        .enter()
+        .append('rect')
+        .attr('x', 0)
+        .attr('y', function(d,i){
+
+            return (d * 24 + d) * 6
+        })
+        .attr('height', function(d,i){
+
+            return 24 * 12
+        })
+        .attr('width', 30)
+        .attr('fill','grey')
+        .attr('stroke-width', '0')
+        .attr('opacity', 0.1)
 
         user_bars.selectAll('step')
-        .data(d => d.filter(q => q[2] != -1))
+        .data(d => d.filter(q => q.start[2] != -1))
         .enter()
-        .append('circle')
-        .attr('cy', function(d,i){
+        .append('rect')
+        .attr('x', 0)
+        .attr('y', function(d,i){
 
-            return (d[0] * 24 + d[1]) * 6
+            return (d.start[0] * 24 + d.start[1]) * 6
         })
-        .attr('r', 5)
-        .attr('stroke', d => accent(d[2]))
-        .attr('stroke-width', '2')
-        .attr('fill', 'none')
-        .attr('height', 5)
-        .attr('opacity', 0.8)
-        .attr('width', 10)
+        .attr('height', function(d,i){
 
+            return (d.end[0] * 24 + d.end[1]) * 6 - (d.start[0] * 24 + d.start[1]) * 6
+        })
+        .attr('width', 30)
+        .attr('fill', d => accent(d.start[2]))
+        .attr('stroke-width', '1')
+        .attr('stroke', 'white')
+        .attr('opacity', 0.8)
+
+           
         svg.selectAll('legend')
         .data([-1,0,1,2,3])
         .enter()
@@ -88,6 +134,17 @@ export default {
             return i * 111
         })
         .text(d => d)
+
+        let yHour = d3.scaleLinear()
+        .range([0, this.height + 100])
+        .domain([0, 24 * 7])
+
+        let hourAxisG = svg.append('g')
+        .attr('transform', 'translate(500,0)')
+        .call(d3.axisRight(yHour));
+
+        hourAxisG.selectAll('text')
+        .attr('font-size', 18)
 
     }
   },
