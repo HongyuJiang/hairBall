@@ -49,7 +49,7 @@ export default {
         source: "region_json",
         paint: {
           "line-width": 2,
-          "line-color": "rgba(200,0,0,0.5)"
+          "line-color": "rgba(255,255,255,0.3)"
         },
         minzoom: 5,
         maxzoom: 20
@@ -121,7 +121,7 @@ export default {
 
           let ODs = { source: point, target: [] };
 
-          that.mapAddSelection(point);
+          //that.mapAddSelection(point);
 
           let targetCounter = {};
 
@@ -197,8 +197,6 @@ export default {
             }
           })
 
-          console.log(graphWithoutEgo)
-
           that.$root.$emit('updateTemporal', sourceEntities)
           that.$root.$emit('updateDirIndicator', positions)
           that.$root.$emit('updateAssocCells', [graphWithoutEgo, that.cell_info])
@@ -223,7 +221,7 @@ export default {
               });
           }
 
-          that.mapAddCurve(ODs);
+          that.mapAddCurve(ODs, s_point);
 
           that.map.getSource("cells").setData({
             type: "FeatureCollection",
@@ -290,15 +288,20 @@ export default {
         let graph = svg
           .selectAll(".link")
           .data(OD_lines)
-          //.enter()
-          
+ 
         graph
           .attr("d", curve)
+
+        d3.select('#selection')
+        .attr('cx', sPos.x)
+        .attr('cy', sPos.y)
           
       }
     },
 
-    mapAddCurve(lineData) {
+    mapAddCurve(lineData, center) {
+
+      let center_pos = center
 
       this.lineData = lineData;
 
@@ -324,8 +327,6 @@ export default {
         OD_lines.push(meta);
       });
 
-      console.log(OD_lines);
-
       let curve = function(d) {
         var dx = d.tx - d.sx,
           dy = d.ty - d.sy,
@@ -348,11 +349,14 @@ export default {
 
       let canvas = that.map.getCanvasContainer();
 
+      d3.select('#d3-canvas').remove()
+
       let svg = d3
         .select(canvas)
         .append("svg")
+        .attr('id','d3-canvas')
         .style("position", "absolute")
-        .attr("width", "1000px")
+        .attr("width", "1100px")
         .attr("height", "1080px");
 
       svg
@@ -362,10 +366,21 @@ export default {
         .append("path")
         .attr('class','link')
         .attr("d", curve)
-        .attr("opacity", 0.4)
+        .attr("opacity", 0.7)
         .attr("fill", "none")
-        .attr("stroke", "#ECEC4B")
+        .attr("stroke", "#D3F78F")
         .attr("stroke-width", d => Math.sqrt(d.weight));
+
+      svg.append('circle')
+        .attr('id','selection')
+        .attr('r', 20)
+        .attr('cx', center_pos.x)
+        .attr('cy', center_pos.y)
+        .attr('fill','white')
+        .attr('opacity', 0.5)
+        .attr('stroke','black')
+        .attr('stroke-width', 4)
+
     },
 
     mapAddSelection(location) {
