@@ -34,7 +34,7 @@ export default {
 
         for(let user in user_semantics){
 
-            if(user_semantics[user].length > 100){
+            if(user_semantics[user].length > 10){
 
                 selected.push({ 'name': user, 'seq': user_semantics[user]})
             }
@@ -63,6 +63,20 @@ export default {
 
           segments_list.push(segments[user])
         }
+
+        let user_name = svg.selectAll('.username')
+        .data(selected.slice(0, 10))
+        .enter()
+        .append('g')
+        .attr('transform',function(d,i){
+
+          return 'translate(' + (i * 50) + ',' + 10 + ')'
+        })
+        .append('text')
+        .attr('transform','rotate(90)')
+        .attr('x',0)
+        .attr('y',0)
+        .text(d => d.name)
 
         let user_bars = svg.selectAll('userBar')
         .data(segments_list.slice(0, 10))

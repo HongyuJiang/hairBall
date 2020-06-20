@@ -167,6 +167,10 @@ export default {
               }
               sourceEntities[id] = 1
             }
+            else{
+
+              p["properties"].selected = false;
+            }
 
           });
 
@@ -182,6 +186,8 @@ export default {
             }
             else if(sourceEntities[id] != undefined){
 
+              p["properties"].color = 'rgba(255,255,255, 0.1)';
+
               let targets = that.relations[id];
 
               if(targets) {
@@ -195,6 +201,7 @@ export default {
               }
               
             }
+            else p["properties"].color = 'rgba(255,255,255, 0.1)';
           })
 
           that.$root.$emit('updateTemporal', sourceEntities)
@@ -428,21 +435,25 @@ export default {
         if (data[cell_id]["id"] != undefined) {
           let cell = data[cell_id];
 
-          let meta = {};
-          meta["properties"] = {};
-          if (cell.name.split("_").length > 1)
-            cell.name = cell.name.split("_")[1];
-          meta["properties"]["name"] = cell.name.replace("绵阳", "");
-          meta["properties"]["weight"] = 1;
-          meta["properties"]["size"] = 0;
-          meta["properties"]["color"] = "rgba(255,255,255,0.1)";
-          meta["properties"]["id"] = cell.id;
-          meta["type"] = "Feature";
-          meta["geometry"] = {};
-          meta["geometry"]["type"] = "Point";
-          meta["geometry"]["coordinates"] = [cell.lon, cell.lat];
+          if(cell != undefined){
 
-          points.push(meta);
+            let meta = {};
+            meta["properties"] = {};
+            if (cell.name.split("_").length > 1)
+              cell.name = cell.name.split("_")[1];
+            meta["properties"]["name"] = cell.name.replace("绵阳", "");
+            meta["properties"]["weight"] = 1;
+            meta["properties"]["size"] = 0;
+            meta["properties"]["color"] = "rgba(255,255,255,0.1)";
+            meta["properties"]["id"] = cell.id;
+            meta["type"] = "Feature";
+            meta["geometry"] = {};
+            meta["geometry"]["type"] = "Point";
+            meta["geometry"]["coordinates"] = [cell.lon, cell.lat];
+
+            points.push(meta);
+          }
+
         } else {
           //console.log(cell_id)
         }

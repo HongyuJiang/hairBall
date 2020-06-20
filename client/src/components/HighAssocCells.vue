@@ -48,12 +48,13 @@ export default {
 
         links.forEach(function(edge){
 
-            if (edge.weight > 1){
+            if (edge.weight > 1 && cell_info[edge.source] != undefined && cell_info[edge.target] != undefined){
 
                 if (IDAssigner[edge.source] == undefined) IDAssigner[edge.source] = d3.keys(IDAssigner).length
                 if (IDAssigner[edge.target] == undefined) IDAssigner[edge.target] = d3.keys(IDAssigner).length
 
-                let newEdge = {'source': IDAssigner[edge.source], 'target': IDAssigner[edge.target], 'value': edge.weight}
+                let newEdge = {'source': IDAssigner[edge.source], 'target': IDAssigner[edge.target], 'value': edge.weight, 'SID': edge.source, 'TID':edge.target}
+                
                 newEdges.push(newEdge)
             }
            
@@ -61,6 +62,7 @@ export default {
 
         for(let node in IDAssigner){
 
+          if(cell_info[node] != undefined)
             nodes.push({'name': cell_info[node].name, 'id': IDAssigner[node]})
         }
 
@@ -116,9 +118,15 @@ export default {
             .attr('class','river')
             .attr("d", sankeyLinkHorizontal())
             .attr("stroke", 'grey')
-            .attr("stroke-opacity", '0.3')
+            .attr("stroke-opacity", '0.4')
             .attr("stroke-width", d => d.width)
             .style("mix-blend-mode", "multiply")
+            .on('click', function(d){
+
+              that.$root.$emit('updateTemporal2', d)
+              d3.selectAll('.river').attr('stroke', 'grey')
+              d3.select(this).attr('stroke', 'yellow')
+            })
             
         svg.append("g")
             .style("font", "16px sans-serif")
