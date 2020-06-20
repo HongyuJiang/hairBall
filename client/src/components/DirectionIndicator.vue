@@ -70,7 +70,7 @@ export default {
         .attr('r', 100)
         .attr('cx', this.width / 2)
         .attr('cy', this.height / 2)
-        .attr('stroke', 'black')
+        .attr('stroke', 'white')
         .attr('opacity', 0.3)
         .attr('stroke-width', 10)
         .attr('fill','none')
@@ -154,14 +154,15 @@ export default {
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'middle')
         .attr('font-family','Microsoft Yahei')
+        .attr('fill', 'white')
     }
   },
   mounted(){
 
     d3.select('#' + 'direction-indicator-container')
       .style('position', 'absolute')
-      .style('top', '5%')
-      .style('right', '5%')
+      .style('top', '2%')
+      .style('right', '2%')
       .style('width', '35%')
       .style('height', '35%')
 

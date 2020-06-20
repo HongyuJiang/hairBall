@@ -124,8 +124,9 @@ export default {
             .on('click', function(d){
 
               that.$root.$emit('updateTemporal2', d)
+              that.$root.$emit('updateUserSemantics', d)
               d3.selectAll('.river').attr('stroke', 'grey')
-              d3.select(this).attr('stroke', 'yellow')
+              d3.select(this).attr('stroke', '#FFE215')
             })
             
         svg.append("g")

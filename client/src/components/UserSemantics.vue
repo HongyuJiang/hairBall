@@ -19,9 +19,9 @@ export default {
     return { }
   },
   methods:{
-    chartInit(user_semantics){
+    chartInit(user_semantics, persons){
 
-        var accent = d3.scaleOrdinal(d3.schemeSet2 );
+        var accent = d3.scaleOrdinal(d3.schemeSet2);
 
         d3.select("#user-semantics").selectAll('*').remove()
 
@@ -29,16 +29,15 @@ export default {
           .attr("viewBox", [-10, -10, this.width , this.height + 200])
           .attr("font-size", 14)
           .attr("font-family", "sans-serif")
+          .append('g')
+          .attr('transform','translate(0,50)')
 
         let selected = []
 
-        for(let user in user_semantics){
+        persons.forEach(function(user){
 
-            if(user_semantics[user].length > 10){
-
-                selected.push({ 'name': user, 'seq': user_semantics[user]})
-            }
-        }
+          selected.push({ 'name': user.person, 'seq': user_semantics[user.person]})
+        })
 
         let segments = {}
         let segments_list = []
@@ -94,7 +93,7 @@ export default {
         .attr('x', 0)
         .attr('y', function(d,i){
 
-            return (d * 24 + d) * 6
+            return (d * 24 + d) * 10
         })
         .attr('height', function(d,i){
 
@@ -112,11 +111,11 @@ export default {
         .attr('x', 0)
         .attr('y', function(d,i){
 
-            return (d.start[0] * 24 + d.start[1]) * 6
+            return (d.start[0] * 24 + d.start[1]) * 10
         })
         .attr('height', function(d,i){
 
-            return (d.end[0] * 24 + d.end[1]) * 6 - (d.start[0] * 24 + d.start[1]) * 6
+            return (d.end[0] * 24 + d.end[1]) * 10 - (d.start[0] * 24 + d.start[1]) * 10
         })
         .attr('width', 30)
         .attr('fill', d => accent(d.start[2]))
@@ -129,7 +128,7 @@ export default {
         .data([-1,0,1,2,3])
         .enter()
         .append('rect')
-        .attr('y', 1050)
+        .attr('y', 1650)
         .attr('x', function(d,i){
             return i * 111
         })
@@ -142,7 +141,7 @@ export default {
         .data(['No semantic', 'Home','Two high','Weekend','Work time'])
         .enter()
         .append('text')
-        .attr('y', 1100)
+        .attr('y', 1700)
         .attr('font-size', 20)
         .attr('x', function(d,i){
             return i * 111
@@ -150,7 +149,7 @@ export default {
         .text(d => d)
 
         let yHour = d3.scaleLinear()
-        .range([0, this.height + 100])
+        .range([0, this.height + 10])
         .domain([0, 24 * 7])
 
         let hourAxisG = svg.append('g')
@@ -166,21 +165,53 @@ export default {
 
     d3.select('#' + 'user-semantics-container')
       .style('position', 'absolute')
-      .style('top', '38%')
+      .style('top', '5%')
       .style('right', '0%')
       .style('width', '30%')
-      .style('height', '55%')
+      .style('height', '85%')
 
     this.width = 600
-    this.height = 950
+    this.height = 1650
 
     let that = this
 
-     DataProvider.getUserSemantics().then(response => {
+    DataProvider.getUserSemantics().then(response => {
 
-        let trajectory = response.data
+        this.trajectory = response.data
 
-        this.chartInit(trajectory)
+    });
+
+    this.$root.$on('updateUserSemantics', data => {
+
+        let candidates = []
+
+        let od = data.SID + '-' + data.TID
+
+        let PODs = this.personODs
+
+        for(let person in PODs){
+
+          let ods = PODs[person]
+
+          if(ods[od] != undefined){
+
+            candidates.push({'person': person, 'count': ods[od]})
+          }
+        }
+
+        candidates = candidates.sort(function(a,b){
+
+          return b.count - a.count
+        })
+
+        candidates = candidates.slice(0,10)
+
+        this.chartInit(this.trajectory, candidates)
+    })
+
+    DataProvider.getPersonODs().then(response => {
+
+        this.personODs = response.data
 
     });
 

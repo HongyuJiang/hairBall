@@ -11,13 +11,13 @@
         />
 
         <mapbox-view />
-    
+        <direction-indicator />
     </div>
 
   
     <div class="float-layer right-float-layer">
 
-      <direction-indicator />
+      
       <user-semantics />
       <high-assoc-cells />
       <temporal-features />

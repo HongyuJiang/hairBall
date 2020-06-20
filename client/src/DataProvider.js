@@ -21,5 +21,10 @@ export default class DataProvider {
 
         return axios.get('/static/user_semantics.json');
     }
+
+    static getPersonODs() {
+
+        return axios.get('/static/persons_cells.json');
+    }
    
 }
