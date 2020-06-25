@@ -182,8 +182,8 @@ export default {
 <style scoped>
 
 .name{
-  border-left: rgb(40, 52, 78) solid 3px;
-  color:black;
+  border-left: rgb(185, 199, 230) solid 3px;
+  color:white;
   padding-left:10px;
   margin-right: 10px;
   right:0px;

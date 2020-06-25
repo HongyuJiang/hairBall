@@ -26,5 +26,15 @@ export default class DataProvider {
 
         return axios.get('/static/persons_cells.json');
     }
+
+    static getMianyangOutline() {
+
+        return axios.get('/static/mianyang.json');
+    }
+
+    static getCellSemantic() {
+
+        return axios.get('/static/cell_semantic.json');
+    }
    
 }
