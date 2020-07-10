@@ -14,12 +14,10 @@
         <direction-indicator />
     </div>
 
-  
     <div class="float-layer right-float-layer">
-
       
       <user-semantics />
-      <high-assoc-cells />
+      <chrod-graph />
       <temporal-features />
       
     </div>  
@@ -41,6 +39,7 @@ import HighAssocCells from './components/HighAssocCells.vue';
 import TemporalFeatures from './components/TemporalFeatures.vue';
 import UserSemantics from './components/UserSemantics.vue';
 import MapboxView from './components/MapboxView.vue';
+import ChrodGraph from './components/ChrodGraph.vue';
 
 //连接时序特征 上 1,2 柱状图或者流图
 //方向特征 中 1 玫瑰图
@@ -56,8 +55,8 @@ export default {
     MapboxView,
     DirectionIndicator,
     UserSemantics,
-    HighAssocCells,
-    TemporalFeatures
+    TemporalFeatures,
+    ChrodGraph
 
   },
   data () {
