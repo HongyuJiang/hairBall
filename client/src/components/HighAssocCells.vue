@@ -130,11 +130,12 @@ export default {
             })
             
         svg.append("g")
-            .style("font", "16px sans-serif")
+            .style("font", "12px sans-serif")
             .selectAll("text")
             .data(nodes)
             .enter()
             .append("text")
+            .attr("fill", 'white')
             .attr('font-family', 'Microsoft Yahei')
             .attr("x", d => d.x0 < that.width / 2 ? d.x1 + 6 : d.x0 - 6)
             .attr("y", d => (d.y1 + d.y0) / 2)
@@ -175,8 +176,8 @@ export default {
 <style scoped>
 
 .name{
-  border-left: rgb(40, 52, 78) solid 3px;
-  color:black;
+  border-left: rgb(185, 199, 230) solid 3px;
+  color:white;
   padding-left:10px;
   margin-right: 10px;
   right:0px;

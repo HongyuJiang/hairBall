@@ -102,7 +102,7 @@ export default {
 
       const group = svg
         .append("g")
-        .attr("transform",'translate(' + outerRadius + ',' + outerRadius + ')')
+        .attr("transform",'translate(' + outerRadius + ',' + (outerRadius - 30) + ')')
         .selectAll("g")
         .data(chords.groups)
         .enter()
@@ -120,6 +120,7 @@ export default {
           d.angle = (d.startAngle + d.endAngle) / 2;
         })
         .attr("dy", ".35em")
+        .attr('font-size', 12)
         .attr(
           "transform",
           d => `
@@ -129,11 +130,12 @@ export default {
       `
         )
         .attr("text-anchor", d => (d.angle > Math.PI ? "end" : null))
-        .text(d => cell_info[nameByIndex[d.index]].name);
+        .attr("fill", 'white')
+        .text(d => cell_info[nameByIndex[d.index]].name.slice(0,5));
 
       svg
         .append("g")
-        .attr("transform",'translate(' + outerRadius + ',' + outerRadius + ')')
+        .attr("transform",'translate(' + outerRadius + ',' + (outerRadius - 30) + ')')
         .attr("fill-opacity", 0.67)
         .selectAll("path")
         .data(chords)
@@ -153,7 +155,7 @@ export default {
   mounted() {
     d3.select("#" + "chord-graph-container")
       .style("position", "absolute")
-      .style("top", "5%")
+      .style("top", "3%")
       .style("right", "20%")
       .style("width", "80%")
       .style("height", "65%");
@@ -174,8 +176,8 @@ export default {
 
 <style scoped>
 .name {
-  border-left: rgb(40, 52, 78) solid 3px;
-  color: black;
+  border-left: rgb(185, 199, 230) solid 3px;
+  color: white;
   padding-left: 10px;
   margin-left: 50px;
   right: 0px;

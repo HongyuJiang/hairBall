@@ -53,8 +53,7 @@ export default {
 
             let meta = {'start': seq[i], 'end': seq[i+1]}
 
-            //if(seq[i+1][0] < 3)
-              segments[name].push(meta)
+            segments[name].push(meta)
           }
         })
 
@@ -68,10 +67,10 @@ export default {
         .enter()
         .append('g')
         .attr('transform',function(d,i){
-
           return 'translate(' + (i * 50) + ',' + 10 + ')'
         })
         .append('text')
+        .attr("fill", 'white')
         .attr('transform','rotate(90)')
         .attr('x',0)
         .attr('y',0)
@@ -141,6 +140,7 @@ export default {
         .data(['No semantic', 'Home','Two high','Weekend','Work time'])
         .enter()
         .append('text')
+        .attr('fill','white')
         .attr('y', 1700)
         .attr('font-size', 20)
         .attr('x', function(d,i){
@@ -158,6 +158,7 @@ export default {
 
         hourAxisG.selectAll('text')
         .attr('font-size', 18)
+        .attr('fill','white')
 
     }
   },
@@ -222,8 +223,8 @@ export default {
 <style scoped>
 
 .name{
-  border-left: rgb(40, 52, 78) solid 3px;
-  color:black;
+  border-left: rgb(185, 199, 230) solid 3px;
+  color:white;
   padding-left:10px;
   margin-right: 60px;
   right:20px;

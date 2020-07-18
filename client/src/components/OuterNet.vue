@@ -143,7 +143,7 @@ export default {
 <style scoped>
 
 .name{
-  border-left: lightsalmon solid 3px;
+  border-left: rgb(185, 199, 230) solid 3px;
   color:black;
   padding-left:10px;
   margin-right: 10px;

@@ -86,13 +86,12 @@ export default {
 
   left:0px;
   height:100%;
-  width: 50%;
+  width: 100%;
 }
 
 .right-float-layer{
 
   right:0px;
-  background:#F3F3F3;
   width: 50%;
   
 }

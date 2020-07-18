@@ -165,6 +165,7 @@ export default {
             ? "rotate(180)"
             : "rotate(0)";
         })
+        .attr('fill','white')
         .style("font-size", "11px")
         .attr("alignment-baseline", "middle");
 
@@ -380,6 +381,7 @@ export default {
             : "rotate(0)";
         })
         .style("font-size", "11px")
+        .attr("fill", "white")
         .attr("alignment-baseline", "middle");
 
       // day ---------------------
@@ -438,6 +440,8 @@ export default {
         .call(d3.axisBottom(xDay));
 
       dayContainer.append("g").call(d3.axisLeft(yDay));
+
+      svg.selectAll('text').attr("fill", "white")
     }
   },
   mounted() {
@@ -471,8 +475,8 @@ export default {
 
 <style scoped>
 .name {
-  border-left: rgb(40, 52, 78) solid 3px;
-  color: black;
+  border-left: rgb(185, 199, 230) solid 3px;
+  color: white;
   padding-left: 10px;
   margin-left: 20px;
   right: 0px;

@@ -68,7 +68,7 @@ export default {
 
         let ring = svg.append('circle')
         .attr('r', 100)
-        .attr('cx', this.width / 2)
+        .attr('cx', 60)
         .attr('cy', this.height / 2)
         .attr('stroke', 'white')
         .attr('opacity', 0.3)
@@ -76,7 +76,7 @@ export default {
         .attr('fill','none')
 
         let spins = svg.append('g')
-        .attr('transform','translate( ' + this.width /2 + ',' + this.height / 2 + ')')
+        .attr('transform','translate( ' + 60 + ',' + this.height / 2 + ')')
 
         let radius = 105
         let barHeight = 50
@@ -107,46 +107,46 @@ export default {
         let cross = svg.append('g')
 
         cross.append('circle')
-        .attr('cx', this.width /2)
+        .attr('cx', 60)
         .attr('cy', this.height /2)
         .attr('r', 6)
         .attr('fill', 'grey')
 
         cross.append('line')
-        .attr('x1', this.width /2 - 30)
-        .attr('x2', this.width /2 + 30)
+        .attr('x1', 60 - 30)
+        .attr('x2', 60 + 30)
         .attr('y1', this.height /2)
         .attr('y2', this.height /2)
         .attr('stroke', 'grey')
 
         cross.append('line')
-        .attr('x1', this.width /2)
-        .attr('x2', this.width /2)
+        .attr('x1', 60)
+        .attr('x2', 60)
         .attr('y1', this.height /2 - 30)
         .attr('y2', this.height /2 + 30)
         .attr('stroke', 'grey')
 
         cross.append('text')
         .attr('class','dir')
-        .attr('x', this.width /2 - 40)
+        .attr('x', 60 - 40)
         .attr('y', this.height /2)
         .text('西')
 
         cross.append('text')
         .attr('class','dir')
-        .attr('x', this.width /2 + 40)
+        .attr('x', 60 + 40)
         .attr('y', this.height /2)
         .text('东')
 
         cross.append('text')
         .attr('class','dir')
-        .attr('x', this.width /2)
+        .attr('x', 60)
         .attr('y', this.height /2 - 40)
         .text('北')
 
         cross.append('text')
         .attr('class','dir')
-        .attr('x', this.width /2)
+        .attr('x', 60)
         .attr('y', this.height /2 + 40)
         .text('南')
 
@@ -162,9 +162,9 @@ export default {
     d3.select('#' + 'direction-indicator-container')
       .style('position', 'absolute')
       .style('top', '2%')
-      .style('right', '2%')
-      .style('width', '35%')
-      .style('height', '35%')
+      .style('left', '2%')
+      .style('width', '17.5%')
+      .style('height', '17.5%')
 
     this.width = 400
     this.height = 450
@@ -186,8 +186,8 @@ export default {
   color:white;
   padding-left:10px;
   margin-right: 10px;
-  right:0px;
-  float: right;
+  left:10px;
+  float: left;
 }
 
 
