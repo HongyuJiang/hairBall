@@ -131,7 +131,13 @@ export default {
         )
         .attr("text-anchor", d => (d.angle > Math.PI ? "end" : null))
         .attr("fill", 'white')
-        .text(d => cell_info[nameByIndex[d.index]].name.slice(0,5));
+        .text(function(d){
+
+          if(d.endAngle - d.startAngle > 0.1 / Math.PI){
+
+            return cell_info[nameByIndex[d.index]].name.slice(0,5)
+          }
+        });
 
       svg
         .append("g")

@@ -12,6 +12,7 @@
 import * as d3 from 'd3';
 import DataProvider from '../DataProvider';
 
+var accent = d3.scaleOrdinal(d3.schemeSet2);
 
 export default {
   name:'direction-indicator',
@@ -19,12 +20,14 @@ export default {
     return { }
   },
   methods:{
-    chartInit(positions){
+    chartInit(positions, semantic_counter){
+
+      console.log(semantic_counter)
 
         d3.select("#direction-indicator").selectAll('*').remove()
 
         const svg = d3.select("#direction-indicator").append('svg')
-          .attr("viewBox", [-50, 50, this.width, this.height])
+          .attr("viewBox", [-50, 50, this.width, this.height * 2])
           .attr("font-size", 16)
           .attr("font-family", "sans-serif")
 
@@ -155,6 +158,40 @@ export default {
         .attr('alignment-baseline', 'middle')
         .attr('font-family','Microsoft Yahei')
         .attr('fill', 'white')
+
+        let group = svg.append('g')
+        .attr('transform','translate(0, 400)')
+
+        group
+        .selectAll('sc')
+        .data(['No semantic', 'Home','Two high','Weekend','Work time'])
+        .enter()
+        .append('circle')
+        .attr('r', function(d,i){
+
+           return Math.sqrt(semantic_counter['' + i])
+        })
+        .attr('fill', function(d,i){
+
+          return accent(i-1)
+        })
+        .attr('opacity',0.7)
+        .attr('cx', 30)
+        .attr('cy', function(d,i){
+          return i * 80
+        })
+
+        group
+        .selectAll('sc')
+        .data(['No semantic', 'Home','Two high','Weekend','Work time'])
+        .enter()
+        .append('text')
+        .attr('x', 70)
+        .attr('y', function(d,i){
+          return i * 80
+        })
+        .attr('fill','white')
+        .text(d => d)
     }
   },
   mounted(){
@@ -164,15 +201,15 @@ export default {
       .style('top', '2%')
       .style('left', '2%')
       .style('width', '17.5%')
-      .style('height', '17.5%')
+      .style('height', '35.5%')
 
     this.width = 400
     this.height = 450
 
     let that = this
 
-    this.$root.$on('updateDirIndicator', positions => {
-      this.chartInit(positions)
+    this.$root.$on('updateDirIndicator', data => {
+      this.chartInit(data.positions, data.counter)
     })
 
   },

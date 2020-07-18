@@ -11,7 +11,9 @@ import * as d3Voronoi from "d3-voronoi";
 
 var MapboxDraw = require("@mapbox/mapbox-gl-draw");
 
-var accent = d3.scaleOrdinal(d3.schemeSet1);
+var accent = d3.scaleOrdinal(d3.schemeSet2);
+
+let id2cellID = {}
 
 export default {
   name: "mapbox-view",
@@ -33,8 +35,6 @@ export default {
     DataProvider.getCellSemantic().then(response => {
 
       this.cell_semantic = response.data
-
-      console.log(this.cell_semantic)
     });
   },
   methods: {
@@ -64,7 +64,7 @@ export default {
         type: "line",
         source: "region_json",
         paint: {
-          "line-width": 2,
+          "line-width": 0,
           "line-color": "rgba(255,255,255,0.3)"
         },
         minzoom: 5,
@@ -86,20 +86,16 @@ export default {
     },
 
     mapInit(that) {
-      let Draw = new MapboxDraw();
 
       mapboxgl.accessToken =
         "pk.eyJ1IjoiaG9uZ3l1amlhbmciLCJhIjoiY2s3N202NDIxMDhkdzNpcGg3djRtdnN4dCJ9.lysys8PBG25SxeHRF-sPvA";
       this.map = new mapboxgl.Map({
         container: "map", // container id
         style: "mapbox://styles/hongyujiang/cja855cbk09vg2spehn1ap5yo", // stylesheet location
-        center: [104.679, 31.858], // starting position [lng, lat]
-        zoom: 7.5 // starting zoom
+        center: [105.579, 31.858], // starting position [lng, lat]
+        zoom: 8.0 // starting zoom
       });
 
-      this.map.addControl(Draw, "bottom-left");
-
-      d3.selectAll(".mapboxgl-control-container").style("z-index", 9999);
     },
     mapAddVoronoid(data) {
 
@@ -175,13 +171,12 @@ export default {
         .data(triangles)
         .enter()
         .append("path")
-        .attr("stroke", "#FA3934")
-        .attr("stroke-opacity", "0")
+        .attr("stroke", "none")
         .attr("fill", "white")
-        .attr("fill-opacity", "0.3")
+        .attr("fill-opacity", "0.7")
         .attr('clip-path','url(#outline-clip)')
         .attr("d", function(d) { return "M" + d.join("L") + "Z" } )
-        .attr('fill', function(d){ return accent(d.data[2]) })
+        .attr('fill', function(d){ return accent(parseInt(d.data[2]))})
   
     },
     mapLoadGeojson(that) {
@@ -202,6 +197,8 @@ export default {
             if (cell_info[cell].id != undefined) {
               let id = cell_info[cell].id;
               info[id] = cell_info[cell];
+
+              id2cellID[id] = cell
             }
           }
 
@@ -227,8 +224,7 @@ export default {
 
           let targetCollection = [];
 
-          let sourceEntities = {},
-            targetEntities = {};
+          let sourceEntities = {}, targetEntities = {};
 
           let positions = [];
 
@@ -296,7 +292,7 @@ export default {
           });
 
           that.$root.$emit("updateTemporal", sourceEntities);
-          that.$root.$emit("updateDirIndicator", positions);
+          
           that.$root.$emit("updateAssocCells", [
             graphWithoutEgo,
             that.cell_info
@@ -314,7 +310,12 @@ export default {
             });
           });
 
+          let semantic_counter = {}
+
           for (let t in targetCounter) {
+
+            let cellID = id2cellID[t]
+
             let cell = that.cell_info[t];
 
             if (cell)
@@ -323,7 +324,24 @@ export default {
                 lat: cell.lat,
                 weight: targetCounter[t]
               });
+
+            if(cellID)
+              if(that.cell_semantic[cellID] != undefined){
+
+                let semantic = that.cell_semantic[cellID]
+
+                if(semantic_counter[semantic] != undefined){
+
+                  semantic_counter[semantic] +=  targetCounter[t]
+                }
+                else{
+
+                  semantic_counter[semantic] =  targetCounter[t]
+                }
+              }
           }
+
+          that.$root.$emit("updateDirIndicator", {'positions': positions, 'counter': semantic_counter});
 
           that.mapAddCurve(ODs, s_point);
 
@@ -463,10 +481,8 @@ export default {
         .data(triangles)
         .enter()
         .append("path")
-        //.attr("stroke", "#FA3934")
-        .attr("stroke-opacity", "0")
-        .attr("fill", "white")
-        .attr("fill-opacity", "0.3")
+        .attr("stroke", "none")
+        .attr("fill-opacity", "0.7")
         .attr("clip-path", "url(#outline-clip)")
         .attr("d", function(d) {
           return "M" + d.join("L") + "Z";
@@ -671,12 +687,7 @@ export default {
           minzoom: 12
         });
       }
-      this.map.on("click", "wubai-circle", function(e) {
-        new mapboxgl.Popup()
-          .setLngLat(e.lngLat)
-          .setHTML(e.features[0].properties.name)
-          .addTo(that.map);
-      });
+    
     },
 
     mapAddMarker(cell) {

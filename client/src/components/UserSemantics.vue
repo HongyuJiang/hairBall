@@ -23,6 +23,12 @@ export default {
 
         var accent = d3.scaleOrdinal(d3.schemeSet2);
 
+        accent(-1)
+        accent(0)
+        accent(1)
+        accent(2)
+        accent(3)
+
         d3.select("#user-semantics").selectAll('*').remove()
 
         const svg = d3.select("#user-semantics").append('svg')
@@ -127,7 +133,7 @@ export default {
         .data([-1,0,1,2,3])
         .enter()
         .append('rect')
-        .attr('y', 1650)
+        .attr('y', 1700)
         .attr('x', function(d,i){
             return i * 111
         })
@@ -141,7 +147,7 @@ export default {
         .enter()
         .append('text')
         .attr('fill','white')
-        .attr('y', 1700)
+        .attr('y', 1750)
         .attr('font-size', 20)
         .attr('x', function(d,i){
             return i * 111
@@ -166,7 +172,7 @@ export default {
 
     d3.select('#' + 'user-semantics-container')
       .style('position', 'absolute')
-      .style('top', '5%')
+      .style('top', '3%')
       .style('right', '0%')
       .style('width', '30%')
       .style('height', '85%')

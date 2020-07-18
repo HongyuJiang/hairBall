@@ -86,8 +86,8 @@ export default {
         .append('g')
         .attr('transform', 'translate(130,80)')
 
-      let innerRadius = 90
-      let outerRadius = 150
+      let innerRadius = 50
+      let outerRadius = 120
 
       // Scales
       var x = d3
@@ -113,7 +113,7 @@ export default {
         .data(hourList)
         .enter()
         .append("path")
-        .attr("fill", "#333")
+        .attr("fill", "#999")
         .attr(
           "d",
           d3
@@ -201,7 +201,7 @@ export default {
           return xDay(d.day);
         })
         .attr("width", xDay.bandwidth())
-        .attr("fill", "#BFAFAC")
+        .attr("fill", "#999")
         .attr("y", function(d) {
           return yDay(d.value);
         })
@@ -211,12 +211,12 @@ export default {
         .on("mouseover", function(d) {
           d3.select(this)
             .transition()
-            .attr("fill", "#D57DE8");
+            .attr("fill", "#333");
         })
         .on("mouseout", function(d) {
           d3.select(this)
             .transition()
-            .attr("fill", "#BFAFAC");
+            .attr("fill", "#999");
         });
 
       dayContainer
@@ -225,6 +225,7 @@ export default {
         .call(d3.axisBottom(xDay));
 
       dayContainer.append("g").call(d3.axisLeft(yDay));
+      svg.selectAll('text').attr("fill", "white")
     },
 
     chartUpdate(SOURCE, TARGET) {
@@ -301,8 +302,8 @@ export default {
         .append('g')
         .attr('transform', 'translate(130,80)')
 
-      let innerRadius = 90
-      let outerRadius = 150
+      let innerRadius = 50
+      let outerRadius = 120
 
       // Scales
       var x = d3
@@ -328,7 +329,7 @@ export default {
         .data(hourList)
         .enter()
         .append("path")
-        .attr("fill", "#69b3a2")
+        .attr("fill", "#999")
         .attr(
           "d",
           d3
@@ -416,7 +417,7 @@ export default {
           return xDay(d.day);
         })
         .attr("width", xDay.bandwidth())
-        .attr("fill", "#BFAFAC")
+        .attr("fill", "#999")
         .attr("y", function(d) {
           return yDay(d.value);
         })
@@ -426,12 +427,12 @@ export default {
         .on("mouseover", function(d) {
           d3.select(this)
             .transition()
-            .attr("fill", "#D57DE8");
+            .attr("fill", "#333");
         })
         .on("mouseout", function(d) {
           d3.select(this)
             .transition()
-            .attr("fill", "#BFAFAC");
+            .attr("fill", "#999");
         });
 
       dayContainer
